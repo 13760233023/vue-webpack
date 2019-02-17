@@ -11,6 +11,10 @@
 > `npm add -D css-loader style-loader less-loader file-loader vue-loader less vue`  
 > 其中引入babel-loader比较不一样，所以将会单独运行  
 > `npm add -D babel-loader @babel/core`  
+> 配置完成后，运行的时候，发现报错了  
+> `TypeError: Cannot read property 'parseComponent' of undefined`  
+> 原因是因为忘记加载vue-template-compiler
+> `npm add -D vue-template-compiler`
 > 后面必须加@babel/core
 > 下一步，安装[HtmlWebpackPlugin](https://www.webpackjs.com/plugins/html-webpack-plugin/)和[ExtractTextWebpackPlugin](https://www.webpackjs.com/plugins/extract-text-webpack-plugin/),点击可跳转到相应的介绍页面，简而言之  
 > HtmlWebpackPlugin该插件的基本作用就是生成html文件  
@@ -33,3 +37,57 @@
 > `yarn add -D extract-text-webpack-plugin@4.0`
 > 假如需要热加载，那么需要输入以下命令安装插件  
 > `npm add -D webpack-dev-server`
+> ```
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const path = require('path');
+
+module.exports = {
+    mode: 'development',
+    entry: './src/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dists'),
+        filename: '[name].[hash:4].js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            },
+            {
+                test: /\.css$/,
+                use: ExtractTextWebpackPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader'
+                })
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader'
+            },
+            {
+                test: /\.less$/,
+                // loader:['style-loader','css-loader','less-loader']
+                use: ExtractTextWebpackPlugin.extract({
+                    fallback: 'style-loader',
+                    use: ['css-loader', 'less-loader']
+                })
+            },
+            {
+                test: /\.(jpg|png|svg)/,
+                loader: 'file-loader'
+            }
+        ]
+    },
+    plugins: [
+        new ExtractTextWebpackPlugin('styles.css'),
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            title: 'vue-webpack'
+        }),
+        new VueLoaderPlugin()
+    ]
+}
+```
