@@ -38,9 +38,11 @@
 > 假如需要热加载，那么需要输入以下命令安装插件  
 > `npm add -D webpack-dev-server`
 ```
+//如果需要配置插件，需要在plugins中，挂载
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+//由于webpack是基于node进行构建的，所以，webpack的配置文件中，任何合法的node代码都是可以在webpack里支持的
 const path = require('path');
 
 module.exports = {
@@ -52,6 +54,7 @@ module.exports = {
     },
     module: {
         rules: [
+        //其中放置处理css/js/less等等文件的loader
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
