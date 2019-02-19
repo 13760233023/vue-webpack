@@ -37,7 +37,7 @@
 > `yarn add -D extract-text-webpack-plugin@4.0`
 > 假如需要热加载，那么需要输入以下命令安装插件  
 > `npm add -D webpack-dev-server`
-> ```
+```
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
